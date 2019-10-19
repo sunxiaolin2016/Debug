@@ -1,0 +1,58 @@
+adb shell am broadcast -a com.ad.action.SYSTEMUI_RUN_RADIO -c android.intent.category.LAUNCHER -n com.ad.radio/com.ad.radio.StaticBroadcastReceiver
+
+adb logcat -v time process >D:/system.log
+
+adb shell pm grant "com.android.systemui" "android.permission.INTERACT_ACROSS_USERS_FULL"
+adb shell pm grant "com.android.bluetooth" "android.permission.READ_CONTACTS"
+
+//change rotation param 0 1 2 3
+adb shell content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:1
+
+adb shell settings put system user_rotation 3
+
+adb shell am start -n com.ad.radio/com.ad.radio.MainActivity
+adb shell am start -n com.android.systemui/com.android.systemui.RecentsActivity
+
+adb shell am start -n com.sun.diffdisplaydemo/com.sun.diffdisplaydemo.MainActivity
+
+//查看所有运行的activity
+adb shell dumpsys activity | findstr -i run
+
+1.uers permissioin
+	android:protectionLevel="signatureOrSystem"
+	android:protectionLevel="signature"
+
+mount -o remount,rw /dev/block/mmcblk0p12 /system
+
+
+//adb开启Log
+adb shell setprop log.tag.DozeService D
+
+NDK_PROJECT_PATH=null 
+APP_BUILD_SCRIPT=E:\SVN\iMX8_eCockpit_Demo\SourceCodeLibrary\2.DevelopLibrary\Branches\carradio\src\main\jni\Android.mk
+NDK_APPLICATION_MK=E:\SVN\iMX8_eCockpit_Demo\SourceCodeLibrary\2.DevelopLibrary\Branches\carradio\src\main\jni\Application.mk
+APP_PLATFORM=android-25 
+
+
+ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk NDK_APPLICATION_MK=./Application.mk
+
+javah -jni com.sun.jnidemo.MainActivity
+
+USB Host: echo host > /sys/devices/platform/5b0d0000.usb/ci_hdrc.0/driver/ci_hdrc.0/role
+
+
+allow system_app tty_device:chr_file rw_file_perms;
+/dev/ttyLP([0-9])+             u:object_r:tty_device:s0
+
+\\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\device\fsl\imx8q\sepolicy
+
+系统签名：./keytool-importkeypair -k Sign.jks -p shine123 -pk8 platform.pk8 -cert platform.x509.pem -alias Sign
+
+dmesg | grep avc
+
+device.te
+type diag_device, dev_type, mlstrustedobject;
+#type serial_device, dev_type, mlstrustedobject;
+#type abc_device, dev_type, mlstrustedobject;
+#type tty_device, dev_type, mlstrustedobject;
+

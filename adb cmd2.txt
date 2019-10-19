@@ -1,0 +1,541 @@
+adb shell am broadcast -a com.ad.action.SYSTEMUI_RUN_RADIO -c android.intent.category.LAUNCHER -n com.ad.radio/com.ad.radio.StaticBroadcastReceiver
+
+adb logcat -v time process >D:/system.log
+
+adb shell pm grant "com.android.systemui" "android.permission.INTERACT_ACROSS_USERS_FULL"
+
+adb shell pm grant "com.android.systemui" "android.permission.READ_CONTACTS"
+
+adb shell pm grant "com.android.bluetooth" "android.permission.READ_CONTACTS"
+
+adb shell pm grant "com.android.systemui" "android.permission.READ_EXTERNAL_STORAGE"
+adb shell pm grant "com.android.systemui" "android.permission.INTERACT_ACROSS_USERS_FULL"
+
+adb shell pm grant "com.autonavi.amapauto" "android.permission.INTERACT_ACROSS_USERS_FULL"
+adb shell pm grant "com.autonavi.amapauto" "android.permission.INTERACT_ACROSS_USERS"
+
+android.permission.READ_EXTERNAL_STORAGE
+
+adb shell pm grant "com.ad.carprovider" "android.permission.INTERACT_ACROSS_USERS_FULL"
+
+adb shell pm grant "com.ad.carprovider" "android.permission.INTERACT_ACROSS_USERS"
+
+//change rotation param 0 1 2 3
+adb shell content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:1
+
+//disable auto rotation
+adb shell content insert --uri content://settings/system --bind name:s:accelerometer_rotation --bind value:i:0
+
+adb shell settings put system user_rotation 3
+
+adb shell am start -n com.ad.radio/com.ad.radio.MainActivity
+adb shell am start -n com.ad.carradio/com.ad.carradio.CarRadioActivity
+adb shell am start -n com.android.systemui/com.android.systemui.RecentsActivity
+adb shell am start -n com.android.systemui/com.android.systemui.RecentsActivity
+adb shell am start -n com.autonavi.amapauto/com.autonavi.amapauto.MainMapActivity
+adb shell am start -n com.autonavi.amapauto/com.autonavi.auto.MainMapActivity
+
+adb shell am start -n com.edog.car/com.kaolafm.auto.home.HubActivity
+adb shell am start -n com.edog.car/com.kaolafm.auto.home.MainActivity
+
+adb shell am start -n com.edog.car/com.kaolafm.auto.home.MainActivity
+
+adb shell am start -n com.ad.carmore/com.ad.carmore.AppGridActivity
+
+adb shell am start -n com.android.settings/com.android.settings.Settings
+
+am start --user 0 -a android.intent.action.VIEW -n com.autonavi.amapauto/com.autonavi.auto.MainMapActivity
+
+adb shell am force-stop com.ad.carstate
+
+adb shell am startservice -n com.ad.carstatus/com.ad.carstatus.CarStatusService
+
+adb shell am start-foreground-service -n com.ad.carstatus/com.ad.carstatus.CarStatusService
+
+adb shell am start -n com.ad.carmore/com.ad.carmore.MainActivity --display 1
+
+adb shell am start -n com.ad.carvoice/com.ad.carvoice.MainActivity --display 1
+
+adb shell am start -n com.ad.carhuddemo/com.ad.carhuddemo.MainActivity --display 1
+
+adb shell am start -n com.android.car.carlauncher/com.android.car.carlauncher.CarLauncher --display 0
+adb shell am start -n com.android.settings/com.android.settings.Settings --display 1
+adb shell am start -n com.android.car.dialer/com.android.car.dialer.TelecomActivity --display 2
+
+adb shell am start -n com.android.car.dialer/com.android.car.dialer.TelecomActivity --display 1
+adb shell am start -n com.android.settings/com.android.settings.Settings --display 1
+adb shell am start -n com.android.car.carlauncher/com.android.car.carlauncher.CarLauncher --display 2
+
+adb shell am force-stop com.ad.carcontrol
+
+adb shell am stopservice com.ad.carmultiscreen.CarMultiScreenService
+adb shell am start-foreground-service -n com.ad.carmultiscreen.CarMultiScreenService
+
+adb shell am stopservice com.ad.carsocketservice.CarSocketService
+adb shell am start-foreground-service -n com.ad.carsocketservice.CarSocketService
+
+adb shell am force-stop com.android.settings/com.android.settings.Settings
+adb shell am com.android.car.carlauncher/com.android.car.carlauncher.CarLauncher
+
+//查看所有运行的activity
+adb shell dumpsys activity | findstr -i run
+
+1.uers permissioin
+	android:protectionLevel="signatureOrSystem"
+	android:protectionLevel="signature"
+
+mount -o remount,rw /dev/block/mmcblk0p12 /system
+
+//adb开启Log
+adb shell setprop log.tag.DozeService D
+
+NDK_PROJECT_PATH=null 
+APP_BUILD_SCRIPT=E:\SVN\iMX8_eCockpit_Demo\SourceCodeLibrary\2.DevelopLibrary\Branches\carradio\src\main\jni\Android.mk
+NDK_APPLICATION_MK=E:\SVN\iMX8_eCockpit_Demo\SourceCodeLibrary\2.DevelopLibrary\Branches\carradio\src\main\jni\Application.mk
+APP_PLATFORM=android-25
+
+ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk NDK_APPLICATION_MK=./Application.mk
+
+javah -jni com.sun.jnidemo.MainActivity
+
+USB Host: echo host > /sys/devices/platform/5b0d0000.usb/ci_hdrc.0/driver/ci_hdrc.0/role
+
+allow system_app tty_device:chr_file rw_file_perms;
+/dev/ttyLP([0-9])+             u:object_r:tty_device:s0
+
+\\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\device\fsl\imx8q\sepolicy
+
+系统签名：./keytool-importkeypair -k Sign.jks -p shine123 -pk8 platform.pk8 -cert platform.x509.pem -alias Sign
+
+dmesg | grep avc
+
+device.te
+type diag_device, dev_type, mlstrustedobject;
+#type serial_device, dev_type, mlstrustedobject;
+#type abc_device, dev_type, mlstrustedobject;
+#type tty_device, dev_type, mlstrustedobject;
+
+/dev/ttyLP[0-9]*            u:object_r:tty_device:s0
+
+allow untrusted_app anr_data_file:dir { read };
+
+# Only allow appending to /data/anr/traces.txt (b/27853304, b/18340553)
+# modify by sunxiaolin 20190210
+neverallow all_untrusted_apps anr_data_file:file ~{ open append };
+neverallow all_untrusted_apps anr_data_file:dir ~search;
+
+/dev/ttyLP([0-9])+          u:object_r:tty_device:s0
+
+org.qtproject.kria_cluster_2d_demo/org.qtproject.qt5.android.bindings.QtActivity
+
+java -jar signapk.jar platform.x509.pem platform.pk8 old.apk new.apk
+java -Djava.library.path=. -jar signapk.jar platform.x509.pem platform.pk8 Amap.apk Amap_signed.apk
+
+//Update
+adb push E:\SVN\iMX8_eCockpit_Demo\SourceCodeLibrary\2.DevelopLibrary\Branches\carprovider\build\outputs\apk\debug\carprovider-debug.apk /system/priv-app/CarProvider/
+
+adb push E:\SVN\iMX8_eCockpit_Demo\SourceCodeLibrary\2.DevelopLibrary\Branches\carprovider\build\outputs\apk\debug\CarProvider.apk /system/priv-app/CarProvider/
+
+adb install E:\app\ESFileManager.apk
+adb install E:\app\Amap.apk
+adb install E:\合作伙伴\qqmusiccar.apk
+adb install E:\合作伙伴\V_TXZ_V2.14.8_V3【74】_20181019稳定版本\TXZCore-release.apk
+adb install E:\app\xiaoya.apk
+adb install C:\Users\Administrator\Desktop\Arceus_UI\android-build-debug.apk
+
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\priv-app\SystemUI\SystemUI.apk /system/priv-app/SystemUI/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\app\CarHvac\CarHvac.apk /system/app/CarHvac/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\priv-app\SettingsProvider\SettingsProvider.apk /system/priv-app/SettingsProvider/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\priv-app\SystemUI\SystemUI.apk /system/priv-app/SystemUI/
+
+adb push G:\media /storage/emulated/0/
+adb push F:\media /storage/emulated/0/
+
+adb shell service list
+
+//micro permission
+/framework/av/services/audiopolicy/service/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\app\CarStatus\CarStatus.apk /system/app/CarStatus/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\framework-res.apk /system/framework/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\priv-app\Settings\Settings.apk /system/priv-app/Settings/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\services.core.jar /system/framework/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\services.jar /system/framework/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\services.jar.prof /system/framework/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\framework.jar /system/framework/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\framework-res.apk /system/framework/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\framework-oahl-backward-compatibility.jar /system/framework/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\ext.jar /system/framework/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\android.test.base.jar /system/framework/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\android.test.runner.jar /system/framework/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\android.test.mock.jar /system/framework/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\android.test.runner-minus-junit.jar /system/framework/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\framework-atb-backward-compatibility.jar /system/framework/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\framework\legacy-test.jar /system/framework/
+
+adb shell settings put system screen_off_timeout 2147483647
+
+adb shell am stack list
+
+//Power
+adb shell input keyevent 26
+//忋妸
+adb shell input keyevent 82
+adb shell input swipe 500 50 500 700
+
+mm WITH_DEXPREOPT=false
+
+adb shell pm get-max-users
+
+adb push X:\temp\20190215\AmapAutoLog /storage/emulated/0/
+adb push X:\temp\20190215\amapauto9 /storage/emulated/0/
+adb push X:\temp\20190215\amap /storage/emulated/0/
+
+adb shell getenforce
+adb shell setenforce 1
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib\libaudioflinger.so /system/lib/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib64\libaudioflinger.so /system/lib64/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib\libaudiopolicyservice.so /system/lib/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib64\libaudiopolicyservice.so /system/lib64/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib\libaudiopolicymanagerdefault.so /system/lib/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib64\libaudiopolicymanagerdefault.so /system/lib64/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib\libaudiopolicymanager.so /system/lib/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib64\libaudiopolicymanager.so /system/lib64/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib\libaudiopolicyenginedefault.so /system/lib/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib64\libaudiopolicyenginedefault.so /system/lib64/
+
+adb shell "service list | grep audio"
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib64\libmedia2_jni.so /system/lib64/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib64\libandroid_servers.so /system/lib64/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib64\libaudioeffect_jni.so /system/lib64/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib64\libsoundpool.so /system/lib64/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib\libmedia2_jni.so /system/lib/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib\libandroid_servers.so /system/lib/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib\libaudioeffect_jni.so /system/lib/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib\libsoundpool.so /system/lib/
+
+make update-api
+adb shell getprop
+
+adb shell settings get system screen_brightness
+adb shell settings get system screen_off_timeout
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib\android.hardware.automotive.evs@1.0.so /system/lib/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib64\android.hardware.automotive.evs@1.0.so /system/lib64/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib\android.hardware.automotive.evs@1.0-adapter-helper.so /system/lib/
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\lib64\android.hardware.automotive.evs@1.0-adapter-helper.so /system/lib64/
+
+查看所有的进程：
+ps -A
+
+adb push Z:\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\app\CarCamera\CarCamera.apk /system/app/CarCamera
+
+adb push W:\temp\20190215\AmapAutoLog /storage/emulated/0/
+adb push W:\temp\20190215\amapauto9 /storage/emulated/0/
+adb push W:\temp\20190215\amap /storage/emulated/0/
+adb push E:\media /storage/emulated/0/
+
+adb shell service list
+
+mek_8q:/ # mx
+mx8_v4l2_cap_drm_32     mx8_v4l2_cap_drm_64
+mek_8q:/ # mx8_v4l2_cap_drm_
+mx8_v4l2_cap_drm_32     mx8_v4l2_cap_drm_64
+mek_8q:/ # mx8_v4l2_cap_drm_64 -cam 1
+
+keytool -list -v -keystore C:\Users\ad\AndroidDemo.jks 
+
+SHA1: 36:AC:15:D5:17:48:B0:44:B6:05:E5:12:7E:13:94:8D:81:1D:25:18
+
+SHA1: D2:1F:93:FE:B4:0F:BE:7A:68:11:2C:50:74:44:DC:79:18:56:28:C5
+
+echo "55" >ttyLP3
+
+/*register ap to M4 once echo 1 > /sys/devices/platform/vehicle_rpmsg_m4/register*/
+
+EVS hal: /vendor/nxp-opensource/imx/evs
+
+
+adb push F:\OpenCV\360_SurroundView\libnative-lib.so /data/app/com.adan.surroundview-lNVCLZOnI_fUaeRLOc3g4g==/lib/arm64/
+adb push F:\OpenCV\360_SurroundView\libgnustl_shared.so /data/app/com.adan.surroundview-lNVCLZOnI_fUaeRLOc3g4g==/lib/arm64/
+adb push F:\OpenCV\360_SurroundView\lib\arm64 /data/app/com.adan.surroundview-lNVCLZOnI_fUaeRLOc3g4g==/lib/
+
+adb install F:\batTool-master\apk\CarControl.apk
+adb install F:\batTool-master\apk\CarProvider.apk
+adb install -t F:\batTool-master\apk\CarState.apk
+adb install F:\batTool-master\apk\CarRadio.apk
+
+
+.\uuu_imx_android_flash.bat -f imx8qm -c 28
+
+cat /proc/net/sockstat
+
+cat /proc/sys/net/core/rmem_max
+cat /proc/sys/net/core/wmem_max
+
+
+cat /proc/sys/net/core/rmem_default
+cat /proc/sys/net/core/wmem_default
+
+cat /proc/sys/net/ipv4/tcp_wmem
+cat /proc/sys/net/ipv4/tcp_rmem
+
+mek_8q:/ # cat /proc/sys/net/ipv4/tcp_wmem
+4096    16384   4194304
+mek_8q:/ # cat /proc/sys/net/ipv4/tcp_rmem
+4096    87380   6291456
+
+keytool -list -v -keystore C:\Users\ad\AndroidDemo.jks
+
+85:77:BD:A9:37:9F:E7:58:BC:97:DD:11:48:D6:25:46:E8:B6:21:1E
+
+grep -s -R -n '#define LOG_TAG "audio_hw_primary"' ./*
+
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib64\libaudiopolicyservice.so /system/lib64/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib64\libaudiopolicymanager.so /system/lib64/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib64\libaudiopolicymanagerdefault.so /system/lib64/
+
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib\libaudiopolicyservice.so /system/lib/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib\libaudiopolicymanager.so /system/lib/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib\libaudiopolicymanagerdefault.so /system/lib/
+
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib64\libaudioflinger.so /system/lib64/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib\libaudioflinger.so /system/lib/
+
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib64\libaudioflinger.so /system/lib64/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib\libaudioflinger.so /system/lib/
+
+
+ack somethingcode
+
+# \xA5\x5A\x01\x10\x03\x03\x00\x00\x00\x11
+\\xA5\\x5A\\x01\\x10\\x48\\x01\\x01\\x00\\x00\\x11
+
+next:
+\\xA5\\x5A\\x01\\x10\\x03\\x03\\x0\\x00\\x00\\x11
+
+source music:
+\xA5\x5A\x01\x10\x48\x01\x01\x59
+A5 5A 01 10 48 01 01 59
+
+source radio:
+\\xA5\\x5A\\x01\\x10\\x48\\x01\\x00\\x58
+A5 5A 01 10 48 01 00 58
+
+mute:
+\\xA5\\x5A\\x01\\x10\\x23\\x01\\x01\\x32
+
+unmute:
+\\xA5\\x5A\\x01\\x10\\x23\\x01\\x00\\x33
+
+/dev/ttyLP3 115200 -cstopb -parity
+
+./console.sh /dev/ttyLP3 115200
+./console.sh /dev/ttyLP3 115200
+
+
+cd /sys/devices/platform/5b0d0000.usb/ci_hdrc.0/
+
+echo host > role
+
+
+git config --global user.name "sunxiaolin2016"
+git config --global user.email "sun.xiaolin@icloud.com"
+
+
+ssh-keygen -t rsa -C "hanyuntaocn@163.com"
+
+
+SVN/iMX8_eCockpit_Demo/SourceCodeLibrary/2.DevelopLibrary/Branches/chenmingtao/CarLauncher
+
+tar -xvf xxx.tar
+
+
+cat /proc/sys/net/core/wmem_max
+
+xl console 1
+
+查看系统设置单个进程的内存上限
+getprop|grep heapgrowthlimit
+
+adb shell dumpsys meminfo
+
+linux
+//查询进程有多少个线程
+ps mp 3143 -o THREAD,tid
+
+//查询进程有多少个进程
+pstree -p 3143
+
+//查询进程状态
+ps mp 3143 -o THREAD,tid
+
+//android
+ps -p 5295 -t
+
+
+echo host > /sys/devices/platform/5b0d0000.usb/ci_hdrc.0/driver/ci_hdrc.0/role
+echo gadget> /sys/devices/platform/5b0d0000.usb/ci_hdrc.0/driver/ci_hdrc.0/role
+
+* echo host > /sys/devices/platform/passthrough/5b0d0000.usb/ci_hdrc.0/role
+* echo gadget > /sys/devices/platform/passthrough/5b0d0000.usb/ci_hdrc.0/role
+
+
+android:configChanges="keyboardHidden|orientation|locale|screenLayout|mcc|mnc|uiMode|screenSize|layoutDirection|fontScale|smallestScreenSize|navigation|keyboard|touchscreen"
+android:configChanges="screenSize"
+
+android.intent.action.CONFIGURATION_CHANGED
+
+
+Config changes=8 {1.0 ?mcc?mnc [en_US] ldltr sw811dp w1442dp h675dp 213dpi lrg long land car night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=Rect(0, 0 - 1920, 931) mWindowingMode=fullscreen mActivityType=undefined} s.7}
+config changes=8 {1.0 ?mcc?mnc [en_US] ldltr sw811dp w1442dp h675dp 213dpi lrg long land car night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1920, 931) mAppBounds=Rect(0, 0 - 1920, 931) mWindowingMode=fullscreen mActivityType=undefined} s.7}
+
+2019-08-05 16:37:28.043 1754-1848/system_process I/ActivityManager: Config changes=8 {1.0 ?mcc?mnc [en_US] ldltr sw811dp w1442dp h675dp 213dpi lrg long land car night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=Rect(0, 0 - 1920, 931) mWindowingMode=fullscreen mActivityType=undefined} s.7}
+2019-08-05 16:37:28.100 1754-1848/system_process I/ActivityManager: Override config changes=8 {1.0 ?mcc?mnc [en_US] ldltr sw811dp w1442dp h675dp 213dpi lrg long land car night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 1920, 931) mAppBounds=Rect(0, 0 - 1920, 931) mWindowingMode=fullscreen mActivityType=undefined} s.7} for displayId=0
+
+
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\framework\services.core.jar /system/framework/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\framework\services.jar.prof /system/framework/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\framework\services.jar /system/framework/
+
+adb shell settings get global ntp_server
+
+adb shell settings put global captive_portal_use_https 0
+adb shell settings get global captive_portal_use_https
+
+server:
+iperf -s -u
+
+client:
+iperf -c 192.168.10.57 -t 10 -b 100M
+iperf -c 192.168.20.77 -t 10 -b 100M
+iperf -c 192.168.10.22 -t 10 -b 100M -u
+
+tinycap record.wav -D0 -d0 -c 2 -r 48000 -b 16
+
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib64\libaudioflinger.so /system/lib64/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib64\libaudiopolicyservice.so /system/lib64/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib64\libaudiopolicymanager.so /system/lib64/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib64\libaudiopolicymanagerdefault.so /system/lib64/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib64\libaudiopolicyenginedefault.so /system/lib64/
+
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib\libaudioflinger.so /system/lib/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib\libaudiopolicyservice.so /system/lib/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib\libaudiopolicymanager.so /system/lib/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib\libaudiopolicymanagerdefault.so /system/lib/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib\libaudiopolicyenginedefault.so /system/lib/
+
+
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib\libaudioclient.so /system/lib/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\lib64\libaudioclient.so /system/lib64/
+
+adb shell sqlite3 data/data/com.android.providers.settings/databases/settings.db
+adb shell settings  put global device_provisioned 1
+
+adb shell settings get global location_global_kill_switch
+adb shell settings put global device_provisioned 1
+
+adb reboot recovery
+
+dumpsys activity service android.car.cluster.sample/.SampleClusterServiceImpl injectKey 22
+dumpsys activity service android.car.cluster.sample/.SampleClusterServiceImpl injectKey 21
+
+adb shell am start -n com.google.android.car.kitchensink/com.google.android.car.kitchensink.cluster.FakeClusterNavigationActivity --display 1
+
+adb shell am start -n com.android.car.carlauncher/com.android.car.carlauncher.CarLauncher --display 0
+
+adb shell am start -n com.android.settings/com.android.settings.Settings --display 0
+adb shell am start -n com.android.car.dialer/com.android.car.dialer.TelecomActivity --display 2
+
+adb shell am start -n android.car.cluster.sample/android.car.cluster.sample.MainClusterActivity --display 1
+
+adb shell am start -n com.android.settings/com.android.settings.Settings --display 1
+
+adb shell am start -n com.ad.demo/com.ad.demo.MainActivity --display 1
+
+adb shell settings get secure location_providers_allowed
+adb shell settings get secure mock_location
+adb shell settings get secure location_providers_allowed
+
+adb shell settings get secure location_mode
+
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\framework\services.core.jar /system/framework/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\framework\services.jar.prof /system/framework/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\framework\services.jar /system/framework/
+
+
+//查看应用已经被授予的动态权限
+adb shell dumpsys package com.ad.audiotest
+
+java -Djava.library.path=. -jar signapk.jar platform.x509.pem platform.pk8 EvsDemo-release.apk EvsDemo-release-signed.apk
+
+java -jar signapk.jar platform.x509.pem platform.pk8 EvsDemo-release.apk EvsDemo-release-signed.apk
+
+java -Xmx2048m -Djava.library.path="out/host/linux-x86/lib64" -jar out/host/linux-x86/framework/signapk.jar build/target/product/security/platform.x509.pem build/target/product/security/platform.pk8 EvsDemo-release.apk EvsDemo-release-signed.apk
+
+java -Xmx2048m -Djava.library.path="out/host/linux-x86/lib64" -jar out/host/linux-x86/framework/signapk.jar build/target/product/security/platform.x509.pem build/target/product/security/platform.pk8 AnwDemo-debug.apk AnwDemo-debug-signed.apk
+
+java -Xmx2048m -Djava.library.path="out/host/linux-x86/lib64" -jar out/host/linux-x86/framework/signapk.jar build/target/product/security/shared.x509.pem build/target/product/security/shared.pk8 AnwDemo-debug.apk AnwDemo-debug-signed.apk
+
+java -Xmx2048m -Djava.library.path="out/host/linux-x86/lib64" -jar out/host/linux-x86/framework/signapk.jar build/target/product/security/testkey.x509.pem build/target/product/security/testkey.pk8 AnwDemo-debug.apk AnwDemo-debug-signed.apk
+
+java -Xmx2048m -Djava.library.path="out/host/linux-x86/lib64" -jar out/host/linux-x86/framework/signapk.jar build/target/product/security/shared.x509.pem build/target/product/security/shared.pk8 AnwDemo-debug.apk AnwDemo-debug-signed.apk
+
+
+setprop vendor.vehicle.event 1
+setprop vendor.vehicle.event 0
+setprop vendor.vehicle.evs_app.event 1
+getprop vendor.vehicle.evs_app.event 0
+
+setprop vendor.vehicle.gear.event 1
+setprop vendor.vehicle.gear.event 2
+setprop vendor.vehicle.gear.event 4
+
+getprop vendor.vehicle.gear.event
+
+setprop vendor.vehicle.turn.event 0
+setprop vendor.vehicle.turn.event 1
+setprop vendor.vehicle.turn.event 2
+
+getprop vendor.vehicle.turn.event
+
+echo 2 > sys/devices/platform/vehicle-dummy/gear
+
+echo 1/2/4(parking/reverse/drive) > /sys/devices/platform/vehicle-dummy/gear
+echo 1 > /sys/devices/platform/vehicle-dummy/gear
+echo 2 > /sys/devices/platform/vehicle-dummy/gear
+echo 4 > /sys/devices/platform/vehicle-dummy/gear
+
+/* echo 0/1/2(none/left/right) > /sys/devices/platform/vehicle-dummy/turn*/
+echo 0 > /sys/devices/platform/vehicle-dummy/turn
+echo 1 > /sys/devices/platform/vehicle-dummy/turn
+echo 2 > /sys/devices/platform/vehicle-dummy/turn
+
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\out\target\product\mek_8q\system\bin\evs_app /system/bin/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\packages\services\Car\evs\app\config.json /system/etc/automotive/evs/
+adb push Z:\imx8_p9.0.0_2.1.0_auto_ga\android9.0.0\packages\services\Car\evs\app\CarFromTop.png /system/etc/automotive/evs/
+
+adb shell input keyevent 3
+
+adb shell am start -n com.android.car.media/com.android.car.media.MediaActivity --display 0
+
+
+
+
+
+
+

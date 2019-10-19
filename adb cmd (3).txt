@@ -1,0 +1,118 @@
+adb shell am broadcast -a com.ad.action.SYSTEMUI_RUN_RADIO -c android.intent.category.LAUNCHER -n com.ad.radio/com.ad.radio.StaticBroadcastReceiver
+
+adb logcat -v time process >D:/system.log
+
+adb shell pm grant "com.android.systemui" "android.permission.INTERACT_ACROSS_USERS_FULL"
+adb shell pm grant "com.android.bluetooth" "android.permission.READ_CONTACTS"
+
+adb shell pm grant "com.android.systemui" "android.permission.READ_EXTERNAL_STORAGE"
+adb shell pm grant "com.android.systemui" "android.permission.INTERACT_ACROSS_USERS_FULL"
+
+adb shell pm grant "com.ad.carprovider" "android.permission.INTERACT_ACROSS_USERS_FULL"
+
+//change rotation param 0 1 2 3
+adb shell content insert --uri content://settings/system --bind name:s:user_rotation --bind value:i:1
+
+//disable auto rotation
+adb shell content insert --uri content://settings/system --bind name:s:accelerometer_rotation --bind value:i:0
+
+adb shell settings put system user_rotation 3
+
+adb shell am start -n com.ad.radio/com.ad.radio.MainActivity
+adb shell am start -n com.android.systemui/com.android.systemui.RecentsActivity
+adb shell am start -n com.android.systemui/com.android.systemui.RecentsActivity
+adb shell am start -n com.autonavi.amapauto/com.autonavi.amapauto.MainMapActivity
+adb shell am start -n com.autonavi.amapauto/com.autonavi.auto.MainMapActivity
+
+adb shell am force-stop com.ad.carstate
+
+
+
+//查看所有运行的activity
+adb shell dumpsys activity | findstr -i run
+
+1.uers permissioin
+	android:protectionLevel="signatureOrSystem"
+	android:protectionLevel="signature"
+
+mount -o remount,rw /dev/block/mmcblk0p12 /system
+
+
+//adb开启Log
+adb shell setprop log.tag.DozeService D
+
+NDK_PROJECT_PATH=null 
+APP_BUILD_SCRIPT=E:\SVN\iMX8_eCockpit_Demo\SourceCodeLibrary\2.DevelopLibrary\Branches\carradio\src\main\jni\Android.mk
+NDK_APPLICATION_MK=E:\SVN\iMX8_eCockpit_Demo\SourceCodeLibrary\2.DevelopLibrary\Branches\carradio\src\main\jni\Application.mk
+APP_PLATFORM=android-25 
+
+
+ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=./Android.mk NDK_APPLICATION_MK=./Application.mk
+
+javah -jni com.sun.jnidemo.MainActivity
+
+USB Host: echo host > /sys/devices/platform/5b0d0000.usb/ci_hdrc.0/driver/ci_hdrc.0/role
+
+
+allow system_app tty_device:chr_file rw_file_perms;
+/dev/ttyLP([0-9])+             u:object_r:tty_device:s0
+
+\\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\device\fsl\imx8q\sepolicy
+
+系统签名：./keytool-importkeypair -k Sign.jks -p shine123 -pk8 platform.pk8 -cert platform.x509.pem -alias Sign
+
+dmesg | grep avc
+
+device.te
+type diag_device, dev_type, mlstrustedobject;
+#type serial_device, dev_type, mlstrustedobject;
+#type abc_device, dev_type, mlstrustedobject;
+#type tty_device, dev_type, mlstrustedobject;
+
+/dev/ttyLP[0-9]*            u:object_r:tty_device:s0
+
+allow untrusted_app anr_data_file:dir { read };
+
+# Only allow appending to /data/anr/traces.txt (b/27853304, b/18340553)
+# modify by sunxiaolin 20190210
+neverallow all_untrusted_apps anr_data_file:file ~{ open append };
+neverallow all_untrusted_apps anr_data_file:dir ~search;
+
+
+/dev/ttyLP([0-9])+          u:object_r:tty_device:s0
+
+adb shell am start -n com.ad.carmore/com.ad.carmore.MainActivity --display 1
+
+org.qtproject.kria_cluster_2d_demo/org.qtproject.qt5.android.bindings.QtActivity
+
+java -jar signapk.jar platform.x509.pem platform.pk8 old.apk new.apk
+java -Djava.library.path=. -jar signapk.jar platform.x509.pem platform.pk8 Amap.apk Amap_signed.apk
+
+
+//Update
+adb push E:\SVN\iMX8_eCockpit_Demo\SourceCodeLibrary\2.DevelopLibrary\Branches\carprovider\build\outputs\apk\debug\carprovider-debug.apk /system/priv-app/CarProvider/
+
+adb push E:\SVN\iMX8_eCockpit_Demo\SourceCodeLibrary\2.DevelopLibrary\Branches\carprovider\build\outputs\apk\debug\CarProvider.apk /system/priv-app/CarProvider/
+
+adb install E:\app\ESFileManager.apk
+adb install E:\app\Amap.apk
+adb install E:\合作伙伴\qqmusiccar.apk
+adb install E:\合作伙伴\V_TXZ_V2.14.8_V3【74】_20181019稳定版本\TXZCore-release.apk
+adb install E:\app\xiaoya.apk
+adb install C:\Users\Administrator\Desktop\Arceus_UI\android-build-debug.apk
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\priv-app\SystemUI\SystemUI.apk /system/priv-app/SystemUI/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\app\CarHvac\CarHvac.apk /system/app/CarHvac/
+
+adb push \\192.168.10.244\sunxl\imx8qm_android\p9.0.0.0\out\target\product\mek_8q\system\priv-app\SystemUI\SystemUI.apk /system/priv-app/SystemUI/
+
+
+adb push G:\media /storage/emulated/0/
+
+adb shell service list
+
+//micro permission
+/framework/av/services/audiopolicy/service/
+
+
+
