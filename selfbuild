@@ -1,0 +1,258 @@
+# color: 0~6 --> black, red, green, yellow, blue, purple, cyan, grey
+export ECHO_STYLE_DEFAULT="\033[0m"        # default style(black background, white foreground)
+export ECHO_STYLE_HID="\033[49;39;25m"  # 
+export ECHO_STYLE_01="\033[41;33;5m"  #  
+export ECHO_STYLE_02="\033[49;33;25m"  # 
+export ECHO_STYLE_03="\033[49;31;5m"  # 
+export ECHO_STYLE_04="\033[49;32;25m"  # 
+export ECHO_STYLE_04_1="\033[49;32;5m"  # 
+export ECHO_STYLE_05="\033[49;34;25m"  # 
+export ECHO_STYLE_06="\033[49;33;25m"  # 
+export ECHO_STYLE_07="\033[49;31;25m"  # 
+export ECHO_STYLE_08="\033[49;31;25m"  # 
+
+
+export ARCH=arm64
+export CROSS_COMPILE=${PWD}/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+export KERNEL_DIR=${PWD}/vendor/nxp-opensource/kernel_imx/
+export UBOOT_DIR=${PWD}/vendor/nxp-opensource/uboot-imx
+export ANDROID_DIR=${PWD}
+export scfw_car=${ANDROID_DIR}/../scfw_export_mx8qm_b0_1.2
+export scfw_car2=${ANDROID_DIR}/../scfw_export_mx8qm_b0_1.2_car2
+export IMAGE_DIR=${ANDROID_DIR}/out/target/product/mek_8q
+export KLIB=${KERNEL_DIR}
+export KLIB_BUILD=${KERNEL_DIR}
+JOB_NUM=`grep processor /proc/cpuinfo |wc -l`
+export ARMGCC_DIR=/opt/gcc-for-m4/gcc-arm-none-eabi-7-2018-q2-update
+export server_ota_folder=${ANDROID_DIR}/android_image/ota_image
+export dist_folder=${ANDROID_DIR}/dist_output
+export LSM9DS1_DIR=${ANDROID_DIR}/hardware/STMicroelectronics/SensorHAL_IIO
+
+adanlogo(){
+
+	echo -e "${ECHO_STYLE_02}******************************************************${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_02}******************************************************${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_02}------------------------------------------------------${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_03}      **        *******          **        ****     **					${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_03}     ****       **     **       ****       ** **    **					${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_03}    **  **      **      **     **  **      **  **   **					${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_03}   ********     **       **   ********     **   **  **					${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_03}  **      **    **       **  **      **    **    ** **					${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_03} **        **   **      **  **        **   **     ****					${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_03}**          **  ********   **          **  **      ***					${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_02}------------------------------------------------------${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_02}******************************************************${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_02}******************************************************${ECHO_STYLE_DEFAULT}"
+	echo
+}
+
+
+buildclean(){
+	echo
+    echo -n -e "${ECHO_STYLE_04}(1)----Do you want to make clean ?${ECHO_STYLE_DEFAULT}"
+	echo -n -e "${ECHO_STYLE_08}  (y/n)    ${ECHO_STYLE_DEFAULT}"
+	
+	read answer
+	case  "$answer"  in   
+	"y"| "Y" )  
+
+	echo -n -e "${ECHO_STYLE_04}Start make clean, please wait${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_04_1}......${ECHO_STYLE_DEFAULT}"
+	echo
+	rm -rf $ANDROID_DIR/out 
+	make clean
+	export BUILD_OTA=true
+	source env.sh
+	cd $LSM9DS1_DIR
+	make sensors-cleanconf	
+	cd -
+		
+	return 
+	;;  
+	"n" | "N" )  
+	echo
+	echo -e "${ECHO_STYLE_04}Don't make clean , will next  ${ECHO_STYLE_DEFAULT}"
+	echo
+	export BUILD_OTA=false
+	return 
+	;;
+	
+	*) 
+	 echo
+	 echo -e "${ECHO_STYLE_04}Don't make clean, will next  ${ECHO_STYLE_DEFAULT}"
+	 echo
+	 return 
+	;; 
+	esac  
+}
+
+build_ota() {
+	if [ ! -d "$dist_folder" ];then
+		echo -e "mkdir server_ota_folder && dist_folder\n"
+		mkdir -p $server_ota_folder
+		mkdir dist_output
+	else
+		echo -e "copy build_old.prop\n"
+		cp ${dist_folder}/build.prop ${server_ota_folder}/build_old.prop
+		#rm ${dist_folder}/build.prop
+		cp ${dist_folder}/mek_8q_car-target_files-eng.${USER}.zip ${ANDROID_DIR}/
+	fi
+
+	echo -e "rebuild OTA\n"
+	make dist DIST_DIR=${dist_folder}
+
+	echo -e "copy build_diff.prop && build.prop\n"
+	cp ${dist_folder}/build.prop ${server_ota_folder}/build.prop
+	cp ${dist_folder}/build.prop ${server_ota_folder}/build_diff.prop
+
+	echo -e "change old base.ro.build.date.utc for build_diff.prop\n"
+	echo -n "base." >> ${server_ota_folder}/build_diff.prop
+	grep "ro.build.date.utc" ${server_ota_folder}/build_old.prop >> ${server_ota_folder}/build_diff.prop
+	cp ${dist_folder}/mek_8q_car-ota-eng.${USER}.zip ${server_ota_folder}
+
+	echo -e "unzip mek_8q_car-ota-eng.${USER}.zip\n"
+	cd ${server_ota_folder}
+	unzip -o mek_8q_car-ota-eng.${USER}.zip
+	rm -rf META-INF
+	rm compatibility.zip
+	rm care_map.txt
+	rm mek_8q_car-ota-eng.${USER}.zip
+
+	echo -e "creat incremental_ota_update.zip\n"
+	cd ${ANDROID_DIR}
+	./build/tools/releasetools/ota_from_target_files -i mek_8q_car-target_files-eng.${USER}.zip dist_output/mek_8q_car-target_files-eng.${USER}.zip incremental_ota_update.zip
+
+	echo -e "unzip incremental_ota_update.zip\n"
+	unzip -o incremental_ota_update.zip
+	rm -rf META-INF
+	rm care_map.txt
+
+	echo -e "creat payload_diff && payload_properties_diff.txt\n"
+	mv payload.bin ${server_ota_folder}/payload_diff.bin
+	mv payload_properties.txt ${server_ota_folder}/payload_properties_diff.txt
+}
+
+build_scfw() {
+	cd $scfw_car
+	./build.sh
+	cd -
+	cd $scfw_car2
+	./build.sh
+	cd -
+}
+
+cpimg() {
+	echo -e "${ECHO_STYLE_04}Start copy android image to android_image  ${ECHO_STYLE_DEFAULT}"
+	mkdir -p -m 777 android_image  
+	cp ${IMAGE_DIR}/boot.img  ${ANDROID_DIR}/android_image/boot.img
+	cp ${IMAGE_DIR}/partition-table-28GB.img  ${ANDROID_DIR}/android_image/partition-table-28GB.img
+	cp ${IMAGE_DIR}/system.img  ${ANDROID_DIR}/android_image/system.img
+	cp ${IMAGE_DIR}/vendor.img  ${ANDROID_DIR}/android_image/vendor.img
+	cp ${IMAGE_DIR}/spl-imx8qm.bin  ${ANDROID_DIR}/android_image/spl-imx8qm.bin
+	cp ${IMAGE_DIR}/bootloader-imx8qm.img  ${ANDROID_DIR}/android_image/bootloader-imx8qm.img
+	cp ${IMAGE_DIR}/dtbo-imx8qm.img  ${ANDROID_DIR}/android_image/dtbo-imx8qm.img
+	cp ${IMAGE_DIR}/vbmeta-imx8qm.img  ${ANDROID_DIR}/android_image/vbmeta-imx8qm.img
+	cp ${ANDROID_DIR}/device/fsl/imx8q/etc/uuu/u-boot-imx8qm-mek-uuu.imx ${ANDROID_DIR}/android_image/u-boot-imx8qm-mek-uuu.imx
+	cp ${ANDROID_DIR}/device/fsl/imx8q/etc/uuu/libusb-1.0.dll ${ANDROID_DIR}/android_image/libusb-1.0.dll
+	cp ${ANDROID_DIR}/device/fsl/imx8q/etc/uuu/uuu.exe ${ANDROID_DIR}/android_image/uuu.exe
+	cp ${IMAGE_DIR}/uuu_imx_android_flash.bat ${ANDROID_DIR}/android_image/uuu_imx_android_flash.bat
+	echo -e "${ECHO_STYLE_04}copy android image finish!!!!  ${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_04}please copy new android image from android_image to windows document!  ${ECHO_STYLE_DEFAULT}"
+}
+
+cp_uboot_img() {
+	echo -e "${ECHO_STYLE_04}Now start copy uboot image ${ECHO_STYLE_DEFAULT}"
+	cp ${IMAGE_DIR}/bootloader-imx8qm.img  ${ANDROID_DIR}/android_image/bootloader-imx8qm.img
+	cp ${IMAGE_DIR}/spl-imx8qm.bin  ${ANDROID_DIR}/android_image/spl-imx8qm.bin
+}
+
+cp_kernel_img() {
+	echo -e "${ECHO_STYLE_04}Now start copy boot image ${ECHO_STYLE_DEFAULT}"
+	cp ${IMAGE_DIR}/boot.img  ${ANDROID_DIR}/android_image/boot.img
+}
+
+cp_dts_img() {
+	echo -e "${ECHO_STYLE_04}Now start copy dtb image ${ECHO_STYLE_DEFAULT}"
+	cp ${IMAGE_DIR}/dtbo-imx8qm.img  ${ANDROID_DIR}/android_image/dtbo-imx8qm.img
+}
+
+adanautobuild(){
+	cd ${ANDROID_DIR}
+	adanlogo
+
+	echo -e "${ECHO_STYLE_04}Now start compile $INPUT_PARA${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_04}CPU core number: $JOB_NUM    ${ECHO_STYLE_DEFAULT}"
+	if [ ! -z "`echo $IMAGE_LIST | grep uboot`" ];then
+		echo -e "${ECHO_STYLE_04}build uboot start! ${ECHO_STYLE_DEFAULT}"
+		build_scfw
+		make bootloader -j$JOB_NUM
+		cp_uboot_img
+
+	elif [ ! -z "`echo $IMAGE_LIST | grep kernel`" ];then
+		echo -e "${ECHO_STYLE_04}build kernel start! ${ECHO_STYLE_DEFAULT}"
+		make bootimage -j$JOB_NUM
+		cp_kernel_img
+
+	elif [ ! -z "`echo $IMAGE_LIST | grep dts`" ];then
+		make dtboimage -j$JOB_NUM
+		cp_dts_img
+	elif [ ! -z "`echo $IMAGE_LIST | grep cpimg`" ];then
+		cpimg
+	elif [ ! -z "`echo $IMAGE_LIST | grep ota`" ];then	
+		build_ota
+	elif [ ! -z "`echo $IMAGE_LIST | grep scfw`" ];then
+		build_scfw
+	else
+		echo -e "${ECHO_STYLE_03}invalid parameter!${ECHO_STYLE_DEFAULT}"
+		exit
+	fi
+	echo -e "${ECHO_STYLE_04}#### build $INPUT_PARA completed successfully ####${ECHO_STYLE_DEFAULT}"
+}
+adanmain(){
+	
+	adanlogo
+	if [ ! -z "`echo $BUILD_ALL | grep true`" ];then
+		buildclean
+	fi
+}
+
+print_help() {
+	echo -e "${ECHO_STYLE_04}----------how to use-----------\n${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_04}./selfbuild			<build all android source incluce OTA image>${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_04}./selfbuild help		<print help info>${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_04}./selfbuild kernel		<build kernel image>${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_04}./selfbuild uboot  		<build uboot image>${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_04}./selfbuild dts    		<build dts image>${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_04}./selfbuild ota    		<build ota image>\n${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_03}tip:after build complete,the image can be found in android_image${ECHO_STYLE_DEFAULT}"
+}
+
+INPUT_PARA=$*
+if [ ! -z "`echo $INPUT_PARA | grep h`" ];then
+	print_help
+	exit
+fi
+
+if [ -z "$INPUT_PARA" ];then
+	export BUILD_ALL=true
+
+	adanmain 
+	source build/envsetup.sh
+	lunch mek_8q_car2-userdebug
+	echo -e "${ECHO_STYLE_03}now start compile all!${ECHO_STYLE_DEFAULT}"
+	echo -e "${ECHO_STYLE_03}cpu core number:$JOB_NUM ${ECHO_STYLE_DEFAULT}"
+	build_scfw
+	make -j$JOB_NUM V=1
+	if [ ! -z "`echo $BUILD_OTA | grep true`" ];then
+		build_ota
+	fi
+	cpimg
+else
+	IMAGE_LIST="$INPUT_PARA"
+	export BUILD_ALL=false
+	if [ -z "`echo $TARGET_PRODUCT | grep mek_8q_car`" ];then
+		source build/envsetup.sh
+		lunch mek_8q_car2-userdebug
+	fi
+	adanautobuild
+fi
